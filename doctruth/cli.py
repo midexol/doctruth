@@ -1,4 +1,4 @@
-"""`stale` command line."""
+"""`doctruth` command line."""
 from __future__ import annotations
 
 import argparse
@@ -13,10 +13,10 @@ FORMATS = {"text": report.text, "json": report.as_json, "markdown": report.markd
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="stale",
+        prog="doctruth",
         description="Find docs, comments and examples that your code change just made untrue.",
     )
-    p.add_argument("--version", action="version", version=f"stale {__version__}")
+    p.add_argument("--version", action="version", version=f"doctruth {__version__}")
     sub = p.add_subparsers(dest="cmd")
 
     c = sub.add_parser("check", help="check a diff for stale docs (default command)")
@@ -53,7 +53,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         result = check(args.repo, opts)
     except GitError as exc:
-        print(f"stale: {exc}", file=sys.stderr)
+        print(f"doctruth: {exc}", file=sys.stderr)
         return 2
     if args.format == "text":
         color = {"always": True, "never": False}.get(args.color)
@@ -61,7 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(FORMATS[args.format](result.findings, result.changes))
     for note in result.notes:
-        print(f"stale: note: {note}", file=sys.stderr)
+        print(f"doctruth: note: {note}", file=sys.stderr)
     return 0 if args.no_fail or not result.findings else 1
 
 

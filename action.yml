@@ -1,4 +1,4 @@
-name: stale
+name: doctruth
 description: Flag docs, comments and examples that a pull request made untrue.
 branding:
   icon: book-open
@@ -8,7 +8,7 @@ inputs:
     description: Base ref to diff against
     default: ${{ github.event.pull_request.base.sha }}
   args:
-    description: Extra arguments for `stale check` (e.g. --run-snippets --llm)
+    description: Extra arguments for `doctruth check` (e.g. --run-snippets --llm)
     default: ""
   fail:
     description: Fail the job when stale docs are found
@@ -23,5 +23,5 @@ runs:
       run: pip install --quiet "${{ github.action_path }}"
     - shell: bash
       run: |
-        stale check --base "${{ inputs.base }}" --head HEAD --format github ${{ inputs.args }} \
+        doctruth check --base "${{ inputs.base }}" --head HEAD --format github ${{ inputs.args }} \
           $([ "${{ inputs.fail }}" = "true" ] || echo --no-fail)

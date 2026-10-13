@@ -8,10 +8,10 @@ import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "demo"))
 import build_demo  # noqa: E402
 
-from stale import report  # noqa: E402
-from stale.engine import Options, check  # noqa: E402
-from stale.judge import Judge  # noqa: E402
-from stale.symbols import extract  # noqa: E402
+from doctruth import report  # noqa: E402
+from doctruth.engine import Options, check  # noqa: E402
+from doctruth.judge import Judge  # noqa: E402
+from doctruth.symbols import extract  # noqa: E402
 
 
 def git(root, *args):
@@ -63,7 +63,7 @@ def test_respects_traps(result):
     paths = {f.path for f in result.findings}
     assert "CHANGELOG.md" not in paths            # history is allowed to mention old names
     assert "UPGRADING.md" not in paths            # line already names the new symbol
-    assert (11, "renamed") not in hits(result, "docs/forecast.md")  # stale:ignore
+    assert (11, "renamed") not in hits(result, "docs/forecast.md")  # doctruth:ignore
     readme_lines = {f.line for f in result.findings if f.path == "README.md"}
     assert 27 not in readme_lines                 # "We retry because..." plain English, no claim
     assert all(f.path != "weatherly/format.py" for f in result.findings)
@@ -154,7 +154,7 @@ def test_judge_failure_never_breaks_the_run(result, demo):
 
 def test_reporters(result):
     md = report.markdown(result.findings, result.changes)
-    assert "```diff" in md and "stale:ignore" in md
+    assert "```diff" in md and "doctruth:ignore" in md
     gh = report.github(result.findings, result.changes)
     assert "::error file=README.md,line=11" in gh
     data = json.loads(report.as_json(result.findings, result.changes))
@@ -162,7 +162,7 @@ def test_reporters(result):
 
 
 def test_cli_exit_codes(demo):
-    run = lambda *a: subprocess.run([sys.executable, "-m", "stale", *a], cwd=demo, capture_output=True, text=True)
+    run = lambda *a: subprocess.run([sys.executable, "-m", "doctruth", *a], cwd=demo, capture_output=True, text=True)
     assert run("--base", "main", "--head", "HEAD").returncode == 1
     assert run("--base", "main", "--head", "HEAD", "--no-fail").returncode == 0
     assert run("--base", "main", "--head", "main").returncode == 0

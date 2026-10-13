@@ -35,14 +35,14 @@ def is_doc_file(path: str) -> bool:
 def _ignored_lines(lines: list[str], start: int) -> set[int]:
     out: set[int] = set()
     for i, l in enumerate(lines):
-        if "stale:ignore" in l and "stale:ignore-file" not in l:
+        if "doctruth:ignore" in l and "doctruth:ignore-file" not in l:
             out.add(start + i)
             out.add(start + i + 1)
     return out
 
 
 def chunk_markdown(path: str, text: str) -> list[DocChunk]:
-    if "stale:ignore-file" in text:
+    if "doctruth:ignore-file" in text:
         return []
     lines = text.split("\n")
     all_ignored = _ignored_lines(lines, 1)
@@ -67,7 +67,7 @@ def chunk_markdown(path: str, text: str) -> list[DocChunk]:
             while j < len(lines) and not lines[j].strip().startswith(marker[0] * len(marker)):
                 j += 1
             body = lines[i + 1:j]
-            skip = any("stale:skip" in l for l in lines[max(0, i - 2):i])
+            skip = any("doctruth:skip" in l for l in lines[max(0, i - 2):i])
             chunk = DocChunk(path, i + 2, "\n".join(body), "code", lang=lang, ignored_lines=all_ignored)
             if skip:
                 chunk.lang = (lang or "") + ":skip"
@@ -91,7 +91,7 @@ def chunk_markdown(path: str, text: str) -> list[DocChunk]:
 
 
 def chunk_python_comments(path: str, text: str) -> list[DocChunk]:
-    if "stale:ignore-file" in text:
+    if "doctruth:ignore-file" in text:
         return []
     lines = text.split("\n")
     ignored = _ignored_lines(lines, 1)
@@ -130,7 +130,7 @@ JS_COMMENT = re.compile(r"/\*[\s\S]*?\*/|//[^\n]*")
 
 
 def chunk_js_comments(path: str, text: str) -> list[DocChunk]:
-    if "stale:ignore-file" in text:
+    if "doctruth:ignore-file" in text:
         return []
     ignored = _ignored_lines(text.split("\n"), 1)
     chunks: list[DocChunk] = []

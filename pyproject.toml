@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stale-docs"
+name = "doctruth"
 version = "0.1.0"
 description = "A linter for documentation that your code change just made untrue."
 readme = "README.md"
@@ -15,10 +15,10 @@ dependencies = []
 dev = ["pytest>=7"]
 
 [project.scripts]
-stale = "stale.cli:main"
+doctruth = "doctruth.cli:main"
 
 [tool.setuptools]
-packages = ["stale"]
+packages = ["doctruth"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

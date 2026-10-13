@@ -20,7 +20,7 @@ from .models import Change, DocChunk, Finding
 from .rules import _refs
 
 API_URL = "https://api.anthropic.com/v1/messages"
-DEFAULT_MODEL = os.environ.get("STALE_MODEL", "claude-sonnet-5-5")
+DEFAULT_MODEL = os.environ.get("DOCTRUTH_MODEL", "claude-sonnet-5-5")
 
 SYSTEM = """You audit documentation for drift. You get a code change (before and after) and one \
 passage of documentation. Decide whether the passage makes a claim that was true before the change \

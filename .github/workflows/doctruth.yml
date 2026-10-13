@@ -1,15 +1,15 @@
 # Drop this into any repo to check every PR for docs it made untrue.
-name: stale docs
+name: doctruth
 on: pull_request
 
 jobs:
-  stale:
+  doctruth:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # stale needs the base commit
-      - uses: midexol/stale@v0 # or: uses: ./  when testing this repo
+      - uses: midexol/doctruth@v0 # or: uses: ./  when testing this repo
         with:
           args: --run-snippets
         # env:

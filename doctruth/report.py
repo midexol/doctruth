@@ -24,7 +24,7 @@ def text(findings: list[Finding], changes: list[Change], color: bool | None = No
     meaningful = [c for c in changes if c.kind != "behaviour_changed"]
     out = []
     if meaningful:
-        out.append(_c("1", f"stale · {len(meaningful)} change(s) in this diff that docs could depend on", on))
+        out.append(_c("1", f"doctruth · {len(meaningful)} change(s) in this diff that docs could depend on", on))
         for c in meaningful:
             out.append(_c("2", f"  · {c.describe()}", on))
         out.append("")
@@ -63,11 +63,11 @@ def as_json(findings: list[Finding], changes: list[Change]) -> str:
 def markdown(findings: list[Finding], changes: list[Change]) -> str:
     """A PR comment. Each finding with a fix gets a GitHub ```suggestion block."""
     if not findings:
-        return "### 🧹 stale\nNo stale docs in this PR. Docs and code agree."
+        return "### 🧹 doctruth\nNo stale docs in this PR. Docs and code agree."
     by_file: dict[str, list[Finding]] = defaultdict(list)
     for f in findings:
         by_file[f.path].append(f)
-    lines = [f"### 🧹 stale found {len(findings)} doc reference(s) this PR made untrue", ""]
+    lines = [f"### 🧹 doctruth found {len(findings)} doc reference(s) this PR made untrue", ""]
     for path, fs in by_file.items():
         lines.append(f"**`{path}`**")
         lines.append("")
@@ -77,7 +77,7 @@ def markdown(findings: list[Finding], changes: list[Change]) -> str:
             if f.suggestion:
                 lines += ["", "  ```diff", f"  - {f.original_line}", f"  + {f.suggestion}", "  ```"]
         lines.append("")
-    lines.append("<sub>Wrong call? Add `stale:ignore` on or above the line, and it won't be flagged again.</sub>")
+    lines.append("<sub>Wrong call? Add `doctruth:ignore` on or above the line, and it won't be flagged again.</sub>")
     return "\n".join(lines)
 
 
@@ -88,9 +88,9 @@ def github(findings: list[Finding], changes: list[Change]) -> str:
         level = "error" if f.severity == "error" else "warning"
         msg = f.message + (f"%0ASuggested: {f.suggestion.strip()}" if f.suggestion else "")
         msg = msg.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A").replace("%250A", "%0A")
-        out.append(f"::{level} file={f.path},line={f.line},title=stale: {LABELS.get(f.kind, f.kind)}::{msg}")
+        out.append(f"::{level} file={f.path},line={f.line},title=doctruth: {LABELS.get(f.kind, f.kind)}::{msg}")
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a", encoding="utf-8") as fh:
             fh.write(markdown(findings, changes) + "\n")
-    return "\n".join(out) if out else "stale: no stale docs found"
+    return "\n".join(out) if out else "doctruth: no stale docs found"

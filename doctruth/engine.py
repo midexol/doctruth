@@ -48,7 +48,7 @@ def load_config(repo: str, opts: Options) -> Options:
     if tomllib is None:
         return opts
     cfg: dict = {}
-    path = os.path.join(repo, ".stale.toml")
+    path = os.path.join(repo, ".doctruth.toml")
     pyproject = os.path.join(repo, "pyproject.toml")
     try:
         if os.path.exists(path):
@@ -56,7 +56,7 @@ def load_config(repo: str, opts: Options) -> Options:
                 cfg = tomllib.load(fh)
         elif os.path.exists(pyproject):
             with open(pyproject, "rb") as fh:
-                cfg = tomllib.load(fh).get("tool", {}).get("stale", {})
+                cfg = tomllib.load(fh).get("tool", {}).get("doctruth", {})
     except (OSError, ValueError):
         return opts
     opts.ignore = list(cfg.get("ignore", [])) + opts.ignore
@@ -110,7 +110,7 @@ def check(repo: str, opts: Options) -> Result:
             names = None if opts.all_snippets else {c.old for c in cs.changes if c.old} | {c.param for c in cs.changes if c.param}
             snippet_findings = run_snippets(chunks, root, names)
         finally:
-            if root != repo and "stale-head-" in os.path.basename(root):
+            if root != repo and "doctruth-head-" in os.path.basename(root):
                 shutil.rmtree(root, ignore_errors=True)
         # a broken example usually also has a rule finding on the same line: keep the one with a fix
         taken = {(f.path, f.line) for f in findings}

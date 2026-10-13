@@ -1,7 +1,7 @@
 """Executable docs: run the Python examples in your Markdown and report the ones that break.
 
 This executes code from your docs, so it is opt-in (`--run-snippets`). Mark a block that
-shouldn't run with `<!-- stale:skip -->` on the line above it.
+shouldn't run with `<!-- doctruth:skip -->` on the line above it.
 """
 from __future__ import annotations
 

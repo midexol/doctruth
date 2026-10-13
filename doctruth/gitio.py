@@ -68,7 +68,7 @@ class Snapshot:
         """Return a directory containing this snapshot's files (for running snippets)."""
         if self.ref is None:
             return os.path.abspath(self.repo)
-        target = tempfile.mkdtemp(prefix="stale-head-")
+        target = tempfile.mkdtemp(prefix="doctruth-head-")
         data = _git(self.repo, "archive", "--format=tar", self.ref, binary=True)
         with tarfile.open(fileobj=io.BytesIO(data)) as tar:
             try:

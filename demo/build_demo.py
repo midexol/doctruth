@@ -1,7 +1,7 @@
 """Build a tiny git repo ("weatherly") with a realistic PR that quietly makes its docs lie.
 
     python demo/build_demo.py /tmp/weatherly
-    cd /tmp/weatherly && stale --run-snippets
+    cd /tmp/weatherly && doctruth --run-snippets
 
 Commit 1 ships code + docs that agree. Commit 2 (the "PR") changes code only:
   - renames Client.fetch_forecast -> Client.get_forecast
@@ -12,7 +12,7 @@ Commit 1 ships code + docs that agree. Commit 2 (the "PR") changes code only:
   - renames env var WEATHERLY_TOKEN -> WEATHERLY_API_KEY
   - deletes weatherly/legacy_cache.py and removes normalize_city()
 Docs are untouched, so they now lie in a dozen places. Some lines are deliberate traps that
-must NOT be flagged (CHANGELOG, an upgrade note, plain English words, a stale:ignore line).
+must NOT be flagged (CHANGELOG, an upgrade note, plain English words, a doctruth:ignore line).
 """
 import os
 import subprocess
@@ -141,7 +141,7 @@ V1 = {
         ```
 
         City names are cleaned up by `normalize_city()` before lookup.
-        <!-- stale:ignore -->
+        <!-- doctruth:ignore -->
         Historical note: early builds called `fetch_forecast` from a cron job.
         ''',
     "UPGRADING.md": '''
@@ -240,4 +240,4 @@ if __name__ == "__main__":
         sys.exit(f"{target} exists and is not empty")
     build(target)
     print(f"Demo repo ready at {target} (branch pr/forecast-api-cleanup, base main).")
-    print(f"Try:  cd {target} && stale --run-snippets")
+    print(f"Try:  cd {target} && doctruth --run-snippets")

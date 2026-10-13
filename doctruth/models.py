@@ -1,4 +1,4 @@
-"""Core data types shared across stale's pipeline: symbols, changes, doc chunks, findings."""
+"""Core data types shared across doctruth's pipeline: symbols, changes, doc chunks, findings."""
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
@@ -77,7 +77,7 @@ class DocChunk:
     text: str
     context: str  # prose | code | comment | docstring
     lang: Optional[str] = None
-    ignored_lines: set[int] = field(default_factory=set)  # absolute line numbers marked stale:ignore
+    ignored_lines: set[int] = field(default_factory=set)  # absolute line numbers marked doctruth:ignore
 
     def line_of(self, offset: int) -> int:
         return self.line + self.text.count("\n", 0, offset)
