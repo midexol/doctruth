@@ -1,0 +1,16 @@
+# Drop this into any repo to check every PR for docs it made untrue.
+name: stale docs
+on: pull_request
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # stale needs the base commit
+      - uses: midexol/stale@v0 # or: uses: ./  when testing this repo
+        with:
+          args: --run-snippets
+        # env:
+        #   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # then add --llm to args
